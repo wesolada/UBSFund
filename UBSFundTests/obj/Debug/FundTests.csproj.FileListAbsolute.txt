@@ -1,0 +1,28 @@
+c:\Users\wesolada\documents\visual studio 2015\Projects\Fund\FundTests\bin\Debug\FundTests.dll
+c:\Users\wesolada\documents\visual studio 2015\Projects\Fund\FundTests\bin\Debug\FundTests.pdb
+c:\Users\wesolada\documents\visual studio 2015\Projects\Fund\FundTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+c:\Users\wesolada\documents\visual studio 2015\Projects\Fund\FundTests\obj\Debug\FundTests.csprojResolveAssemblyReference.cache
+c:\Users\wesolada\documents\visual studio 2015\Projects\Fund\FundTests\obj\Debug\FundTests.dll
+c:\Users\wesolada\documents\visual studio 2015\Projects\Fund\FundTests\obj\Debug\FundTests.pdb
+D:\Praca_Adam\UBS\Fund\FundTests\obj\Debug\FundTests.csprojResolveAssemblyReference.cache
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\Fund.mdf
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\Fund_log.ldf
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\FundTests.dll.config
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\FundTests.dll
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\FundTests.pdb
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\EntityFramework.dll
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\EntityFramework.SqlServer.dll
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\Fund.exe
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\MVVMClasses.dll
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\nunit.framework.dll
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\Typemock.ArrangeActAssert.Dll
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\TypeMock.Dll
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\Fund.pdb
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\EntityFramework.xml
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\EntityFramework.SqlServer.xml
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\nunit.framework.xml
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\TypeMock.xml
+D:\Praca_Adam\UBS\Fund\FundTests\bin\Debug\Typemock.ArrangeActAssert.xml
+D:\Praca_Adam\UBS\Fund\FundTests\obj\Debug\FundTests.dll
+D:\Praca_Adam\UBS\Fund\FundTests\obj\Debug\FundTests.pdb

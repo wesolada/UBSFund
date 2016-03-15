@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FundModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Stock">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FundID" Type="Int32" Nullable="false" />
+    <Property Name="StockTypeID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Price" Type="Decimal" Precision="11" Scale="2" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="MarketValue" Type="Decimal" Precision="11" Scale="2" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+    <Property Name="TransactionCost" Type="Decimal" Precision="11" Scale="2" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+    <NavigationProperty Name="StockTypes" Relationship="Self.FK_Stocks_StockTypes" FromRole="Stocks" ToRole="StockTypes" />
+    <NavigationProperty Name="Fund" Relationship="FundModel.FK_Stocks_Funds" FromRole="Stock" ToRole="Fund" />
+  </EntityType>
+  <EntityType Name="StockType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Stocks" Relationship="Self.FK_Stocks_StockTypes" FromRole="StockTypes" ToRole="Stocks" />
+  </EntityType>
+  <Association Name="FK_Stocks_StockTypes">
+    <End Role="StockTypes" Type="FundModel.StockType" Multiplicity="1" />
+    <End Role="Stocks" Type="FundModel.Stock" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StockTypes">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Stocks">
+        <PropertyRef Name="StockTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="FundEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Stocks" EntityType="FundModel.Stock" />
+    <EntitySet Name="StockTypes" EntityType="FundModel.StockType" />
+    <AssociationSet Name="FK_Stocks_StockTypes" Association="Self.FK_Stocks_StockTypes">
+      <End Role="StockTypes" EntitySet="StockTypes" />
+      <End Role="Stocks" EntitySet="Stocks" />
+    </AssociationSet>
+    <EntitySet Name="Funds" EntityType="FundModel.Fund" />
+    <AssociationSet Name="FK_Stocks_Funds" Association="FundModel.FK_Stocks_Funds">
+      <End Role="Fund" EntitySet="Funds" />
+      <End Role="Stock" EntitySet="Stocks" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Fund">
+    <Key>
+      <PropertyRef Name="FundID" />
+    </Key>
+    <Property Name="FundID" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Value" Type="Decimal" Nullable="false" Precision="22" Scale="2" />
+    <NavigationProperty Name="Stocks" Relationship="FundModel.FK_Stocks_Funds" FromRole="Fund" ToRole="Stock" />
+  </EntityType>
+  <Association Name="FK_Stocks_Funds">
+    <End Type="FundModel.Fund" Role="Fund" Multiplicity="1" />
+    <End Type="FundModel.Stock" Role="Stock" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Fund">
+        <PropertyRef Name="FundID" />
+      </Principal>
+      <Dependent Role="Stock">
+        <PropertyRef Name="FundID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

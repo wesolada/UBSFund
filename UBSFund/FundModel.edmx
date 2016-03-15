@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="FundModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Funds">
+          <Key>
+            <PropertyRef Name="FundID" />
+          </Key>
+          <Property Name="FundID" Type="int" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Value" Type="decimal" Precision="22" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Stocks">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FundID" Type="int" Nullable="false" />
+          <Property Name="StockTypeID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Price" Type="decimal" Precision="11" Scale="2" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="MarketValue" Type="decimal" Precision="11" Scale="2" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="TransactionCost" Type="decimal" Precision="11" Scale="2" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StockTypes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Stocks_Funds">
+          <End Role="Funds" Type="Self.Funds" Multiplicity="1" />
+          <End Role="Stocks" Type="Self.Stocks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Funds">
+              <PropertyRef Name="FundID" />
+            </Principal>
+            <Dependent Role="Stocks">
+              <PropertyRef Name="FundID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stocks_StockTypes">
+          <End Role="StockTypes" Type="Self.StockTypes" Multiplicity="1" />
+          <End Role="Stocks" Type="Self.Stocks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockTypes">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Stocks">
+              <PropertyRef Name="StockTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FundModelStoreContainer">
+          <EntitySet Name="Funds" EntityType="Self.Funds" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stocks" EntityType="Self.Stocks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StockTypes" EntityType="Self.StockTypes" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Stocks_Funds" Association="Self.FK_Stocks_Funds">
+            <End Role="Funds" EntitySet="Funds" />
+            <End Role="Stocks" EntitySet="Stocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stocks_StockTypes" Association="Self.FK_Stocks_StockTypes">
+            <End Role="StockTypes" EntitySet="StockTypes" />
+            <End Role="Stocks" EntitySet="Stocks" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FundModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Stock">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FundID" Type="Int32" Nullable="false" />
+          <Property Name="StockTypeID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="Decimal" Precision="11" Scale="2" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="MarketValue" Type="Decimal" Precision="11" Scale="2" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="TransactionCost" Type="Decimal" Precision="11" Scale="2" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="StockTypes" Relationship="Self.FK_Stocks_StockTypes" FromRole="Stocks" ToRole="StockTypes" />
+          <NavigationProperty Name="Fund" Relationship="FundModel.FK_Stocks_Funds" FromRole="Stock" ToRole="Fund" />
+        </EntityType>
+        <EntityType Name="StockType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Stocks" Relationship="Self.FK_Stocks_StockTypes" FromRole="StockTypes" ToRole="Stocks" />
+        </EntityType>
+        <Association Name="FK_Stocks_StockTypes">
+          <End Role="StockTypes" Type="FundModel.StockType" Multiplicity="1" />
+          <End Role="Stocks" Type="FundModel.Stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockTypes">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Stocks">
+              <PropertyRef Name="StockTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FundEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Stocks" EntityType="FundModel.Stock" />
+          <EntitySet Name="StockTypes" EntityType="FundModel.StockType" />
+          <AssociationSet Name="FK_Stocks_StockTypes" Association="Self.FK_Stocks_StockTypes">
+            <End Role="StockTypes" EntitySet="StockTypes" />
+            <End Role="Stocks" EntitySet="Stocks" />
+          </AssociationSet>
+          <EntitySet Name="Funds" EntityType="FundModel.Fund" />
+          <AssociationSet Name="FK_Stocks_Funds" Association="FundModel.FK_Stocks_Funds">
+            <End Role="Fund" EntitySet="Funds" />
+            <End Role="Stock" EntitySet="Stocks" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Fund">
+          <Key>
+            <PropertyRef Name="FundID" />
+          </Key>
+          <Property Name="FundID" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Value" Type="Decimal" Nullable="false" Precision="22" Scale="2" />
+          <NavigationProperty Name="Stocks" Relationship="FundModel.FK_Stocks_Funds" FromRole="Fund" ToRole="Stock" />
+        </EntityType>
+        <Association Name="FK_Stocks_Funds">
+          <End Type="FundModel.Fund" Role="Fund" Multiplicity="1" />
+          <End Type="FundModel.Stock" Role="Stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fund">
+              <PropertyRef Name="FundID" />
+            </Principal>
+            <Dependent Role="Stock">
+              <PropertyRef Name="FundID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FundModelStoreContainer" CdmEntityContainer="FundEntities">
+          <EntitySetMapping Name="Stocks">
+            <EntityTypeMapping TypeName="FundModel.Stock">
+              <MappingFragment StoreEntitySet="Stocks">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FundID" ColumnName="FundID" />
+                <ScalarProperty Name="StockTypeID" ColumnName="StockTypeID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="MarketValue" ColumnName="MarketValue" />
+                <ScalarProperty Name="TransactionCost" ColumnName="TransactionCost" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockTypes">
+            <EntityTypeMapping TypeName="FundModel.StockType">
+              <MappingFragment StoreEntitySet="StockTypes">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Funds">
+            <EntityTypeMapping TypeName="FundModel.Fund">
+              <MappingFragment StoreEntitySet="Funds">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="FundID" ColumnName="FundID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

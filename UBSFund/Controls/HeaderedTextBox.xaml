@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="UBSFund.Controls.HeaderedTextBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0"
+                   Text="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Header}"
+                   VerticalAlignment="Center" />
+        <TextBox x:Name="ContentTbx"
+            Grid.Column="1"
+                 Margin="5,0,0,0"
+                 VerticalAlignment="Center"
+                 GotFocus="TextBox_OnGotFocus"
+                 HorizontalContentAlignment="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ContentAlignment}"
+                 Width="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ContentWidth}"
+                 Text="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ContentValue, UpdateSourceTrigger=PropertyChanged}" />
+    </Grid>
+</UserControl>

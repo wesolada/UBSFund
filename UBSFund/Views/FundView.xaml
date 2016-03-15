@@ -1,0 +1,213 @@
+﻿<Window x:Class="UBSFund.Views.FundView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:viewModels="clr-namespace:UBSFund.ViewModels"
+        xmlns:converters="clr-namespace:UBSFund.Converters"
+        xmlns:controls="clr-namespace:UBSFund.Controls"
+        xmlns:resx="clr-namespace:UBSFund.Properties"
+        Title="{x:Static resx:Resources.FundView_Title}"
+        WindowState="Maximized"
+        Background="DarkGray"
+        MinWidth="1050"
+        MinHeight="600">
+    <Window.DataContext>
+        <viewModels:FundViewModel />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="Outside_Border" Color="#FF6F6F6F" />
+        <SolidColorBrush x:Key="Inside_Background" Color="#FFF0F0F0" />
+        <SolidColorBrush x:Key="GridLines" Color="#FFD8D8D8" />
+
+        <converters:StockTypeConverter x:Key="StockTypeConverter" />
+        <converters:StockNameConverter x:Key="StockNameConverter" />
+        <converters:StockNameColorConverter x:Key="StockNameColorConverter" />
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+        <Style x:Key="DataGridTextColumnRightStyle" TargetType="FrameworkElement">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <Border DockPanel.Dock="Top"
+                    Margin="10"
+                    BorderThickness="1"
+                    BorderBrush="{StaticResource Outside_Border}"
+                    Background="{StaticResource Inside_Background}">
+                <Grid x:Name="AddPanel">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0"
+                                Margin="10"
+                                Orientation="Horizontal">
+                        <GroupBox x:Name="StockTypes"
+                                  Header="Stock type"
+                                  MinWidth="100">
+                            <StackPanel Orientation="Vertical">
+                                <RadioButton Margin="5,10,10,10"
+                                             Content="{x:Static resx:Resources.FundView_Equity}"
+                                             IsChecked="{Binding StockType, Converter={StaticResource StockTypeConverter}, ConverterParameter=1}" />
+                                <RadioButton Margin="5,0,10,10"
+                                             Content="{x:Static resx:Resources.FundView_Bond}"
+                                             IsChecked="{Binding StockType, Converter={StaticResource StockTypeConverter}, ConverterParameter=2}" />
+                            </StackPanel>
+                        </GroupBox>
+
+
+                        <controls:HeaderedTextBox Header="{x:Static resx:Resources.FundView_Price_Required}"
+                                                  Margin="20,0,0,0"
+                                                  ContentValue="{Binding StockPrice, Mode=TwoWay}"
+                                                  ContentWidth="100"
+                                                  ContentAlignment="Right" />
+
+                        <controls:HeaderedTextBox Header="{x:Static resx:Resources.FundView_Quantity_Required}"
+                                                  Margin="20,0,0,0"
+                                                  ContentValue="{Binding StockQuantity, Mode=TwoWay}"
+                                                  ContentWidth="100"
+                                                  ContentAlignment="Right" />
+
+                        <Button Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                Content="{x:Static resx:Resources.FundView_AddStock}"
+                                Width="70"
+                                Command="{Binding AddCommand}" />
+
+                    </StackPanel>
+
+                    <Grid Grid.Column="1"
+                          Margin="10"
+                          HorizontalAlignment="Right">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Grid.Row="0"
+                                   Margin="0,0,10,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   Text="{x:Static resx:Resources.FundView_Currency}" />
+                        <ComboBox Grid.Column="1"
+                                  Grid.Row="0"
+                                  Width="110"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Right"
+                                  ItemsSource="{Binding CultureList, Mode=OneTime}"
+                                  SelectedIndex="4"
+                                  DisplayMemberPath="NumberFormat.CurrencySymbol"
+                                  SelectionChanged="Currency_OnSelectionChanged" />
+
+                        <TextBlock Grid.Column="0"
+                                   Grid.Row="1"
+                                   Margin="0,0,10,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   Text="{x:Static resx:Resources.FundView_Fund}" />
+                        <ComboBox Grid.Column="1"
+                                  Grid.Row="1"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Right"
+                                  Width="110"
+                                  ItemsSource="{Binding FundsList, Mode=OneTime}"
+                                  SelectedIndex="{Binding FundID}"
+                                  DisplayMemberPath="Description" />
+                    </Grid>
+                </Grid>
+            </Border>
+            <Grid x:Name="SummaryPanel"
+                  DockPanel.Dock="Right"
+                  MinWidth="300">
+                <Border Grid.Row="0"
+                        Grid.ColumnSpan="2"
+                        Margin="0,0,10,10"
+                        BorderThickness="1"
+                        BorderBrush="{StaticResource Outside_Border}"
+                        Background="{StaticResource Inside_Background}">
+                    <StackPanel Orientation="Vertical">
+                        <controls:SummaryControl Header="{x:Static resx:Resources.FundView_Equity}"
+                                                 Margin="10"
+                                                 TotalNumber="{Binding EquityTotalNumber, Mode=OneWay}"
+                                                 TotalWeight="{Binding EquityTotalWeight, Mode=OneWay}"
+                                                 TotalMarketValue="{Binding EquityTotalMarketValue, Mode=OneWay}" />
+                        <controls:SummaryControl Header="{x:Static resx:Resources.FundView_Bond}"
+                                                 Margin="10"
+                                                 TotalNumber="{Binding BondTotalNumber, Mode=OneWay}"
+                                                 TotalWeight="{Binding BondTotalWeight, Mode=OneWay}"
+                                                 TotalMarketValue="{Binding BondTotalMarketValue, Mode=OneWay}" />
+                        <controls:SummaryControl Header="{x:Static resx:Resources.FundView_All}"
+                                                 Margin="10"
+                                                 TotalNumber="{Binding StockTotalNumber, Mode=OneWay}"
+                                                 TotalWeight="{Binding StockTotalWeight, Mode=OneWay}"
+                                                 TotalMarketValue="{Binding StockTotalMarketValue, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+            <DataGrid x:Name="StocksGrid"
+                      ColumnWidth="*"
+                      BorderBrush="{StaticResource Outside_Border}"
+                      AutoGenerateColumns="False"
+                      HorizontalGridLinesBrush="{StaticResource GridLines}"
+                      VerticalGridLinesBrush="{StaticResource GridLines}"
+                      AlternatingRowBackground="{StaticResource Inside_Background}"
+                      CanUserReorderColumns="False"
+                      CanUserResizeColumns="False"
+                      CanUserResizeRows="False"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow"
+                      RowHeaderWidth="0"
+                      Margin="10,0,10,10"
+                      ItemsSource="{Binding StocksList}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="{x:Static resx:Resources.FundView_StockType}"
+                                        Binding="{Binding StockTypeID, Converter={StaticResource StockNameConverter}}" />
+                    <DataGridTemplateColumn Header="{x:Static resx:Resources.FundView_StockName}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}">
+                                    <TextBlock.Foreground>
+                                        <MultiBinding Converter="{StaticResource StockNameColorConverter}">
+                                            <Binding Path="MarketValue" />
+                                            <Binding Path="TransactionCost" />
+                                            <Binding Path="StockTypeID" />
+                                        </MultiBinding>
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="{x:Static resx:Resources.FundView_Price}"
+                                        Binding="{Binding Price, StringFormat=C2}"
+                                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}" />
+                    <DataGridTextColumn Header="{x:Static resx:Resources.FundView_Quantity}"
+                                        Binding="{Binding Quantity}"
+                                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}" />
+                    <DataGridTextColumn Header="{x:Static resx:Resources.FundView_MarketValue}"
+                                        Binding="{Binding MarketValue, StringFormat=C2}"
+                                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}" />
+                    <DataGridTextColumn Header="{x:Static resx:Resources.FundView_TransactionCost}"
+                                        Binding="{Binding TransactionCost, StringFormat=C2}"
+                                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}" />
+                    <DataGridTextColumn Header="{x:Static resx:Resources.FundView_StockWeight}"
+                                        Binding="{Binding Weight, StringFormat=P2}"
+                                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+
+        <controls:ErrorPanel VerticalAlignment="Center"
+                             HorizontalAlignment="Center"
+                             ErrorMessage="{x:Static resx:Resources.FundView_AddErrorMessage}"
+                             Visibility="{Binding Error, Converter={StaticResource BoolToVisibilityConverter}}" />
+    </Grid>
+
+</Window>
